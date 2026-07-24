@@ -1,0 +1,50 @@
+test_cases:
+  - id: "math-001"
+    name: "Basic Addition"
+    input: "What is 2 + 2?"
+    expected_output: "4"
+    tags: ["math", "basic"]
+    metadata:
+      difficulty: "easy"
+
+  - id: "math-002"
+    name: "Multiplication"
+    input: "Calculate 7 * 8"
+    expected_output: "56"
+    tags: ["math", "basic"]
+    metadata:
+      difficulty: "easy"
+
+  - id: "facts-001"
+    name: "Capital of France"
+    input: "What is the capital of France?"
+    expected_output: "Paris"
+    tags: ["geography", "facts"]
+    metadata:
+      difficulty: "easy"
+
+  - id: "facts-002"
+    name: "Largest Planet"
+    input: "What is the largest planet in our solar system?"
+    expected_output: "Jupiter"
+    tags: ["astronomy", "facts"]
+    metadata:
+      difficulty: "easy"
+
+  - id: "reasoning-001"
+    name: "Simple Logic"
+    input: "If all cats are animals, and Fluffy is a cat, is Fluffy an animal?"
+    expected_output: "yes"
+    tags: ["reasoning", "logic"]
+    metadata:
+      difficulty: "medium"
+
+graders:
+  - type: "exact_match"
+    name: "exact_match"
+    case_sensitive: false
+    strip_whitespace: true
+
+  - type: "llm_judge"
+    name: "llm_judge"
+    model: "gpt-4o-mini"

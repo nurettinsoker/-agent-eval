@@ -1,0 +1,10 @@
+graders:
+- type: exact_match
+  name: exact
+  case_sensitive: false
+- type: semantic_similarity
+  name: semantic
+  threshold: 0.75
+- type: llm_judge
+  name: llm_judge
+  model: gpt-4o-mini

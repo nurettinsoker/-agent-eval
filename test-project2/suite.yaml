@@ -1,0 +1,4 @@
+name: basic_suite
+agent: agent.yaml
+test_cases: tests.yaml
+graders: graders.yaml

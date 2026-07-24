@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  clerkId       String    @unique
+  email         String    @unique
+  name          String?
+  imageUrl      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  organizations OrganizationMember[]
+  apiKeys       ApiKey[]
+}
+
+model Organization {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  members     OrganizationMember[]
+  projects    Project[]
+  evalSuites  EvalSuite[]
+  apiKeys     ApiKey[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  userId         String
+  organizationId String
+  role           String       @default("MEMBER")
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  @@unique([userId, organizationId])
+}
+
+model Project {
+  id             String     @id @default(cuid())
+  name           String
+  description    String?
+  organizationId String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  evalRuns       EvalRun[]
+  apiKeys        ApiKey[]
+}
+
+model EvalSuite {
+  id             String     @id @default(cuid())
+  name           String
+  version        String     @default("1.0.0")
+  description    String?
+  organizationId String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  testCases      TestCase[]
+}
+
+model TestCase {
+  id          String   @id @default(cuid())
+  name        String
+  input       String
+  expected    String?
+  metadata    String?
+  tags        String   @default("")
+  suiteId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  suite       EvalSuite @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+}
+
+model EvalRun {
+  id           String   @id @default(cuid())
+  projectId    String
+  agentConfig  String
+  status       String   @default("PENDING")
+  startedAt    DateTime?
+  completedAt  DateTime?
+  totalTests   Int      @default(0)
+  passedTests  Int      @default(0)
+  totalCost    Float    @default(0)
+  totalTokens  Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  results      EvalResult[]
+}
+
+model EvalResult {
+  id            String   @id @default(cuid())
+  runId         String
+  testCaseId    String
+  testCaseName  String
+  agentOutput   String
+  passed        Boolean
+  score         Float
+  latencyMs     Int
+  costUsd       Float
+  tokens        Int
+  error         String?
+  createdAt     DateTime @default(now())
+  run           EvalRun  @relation(fields: [runId], references: [id], onDelete: Cascade)
+  grades        Grade[]
+}
+
+model Grade {
+  id          String     @id @default(cuid())
+  resultId    String
+  graderName  String
+  graderType  String
+  score       Float
+  passed      Boolean
+  reasoning   String?
+  metadata    String?
+  createdAt   DateTime   @default(now())
+  result      EvalResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+}
+
+model ApiKey {
+  id             String   @id @default(cuid())
+  name           String
+  keyHash        String   @unique
+  prefix         String
+  organizationId String
+  projectId      String?
+  userId         String
+  expiresAt      DateTime?
+  lastUsedAt     DateTime?
+  createdAt      DateTime @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project        Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

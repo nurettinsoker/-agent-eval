@@ -1,0 +1,26 @@
+test_cases:
+- id: db573b15
+  name: basic_math
+  input: What is 2 + 2?
+  expected_output: '4'
+  metadata: {}
+  tags:
+  - math
+  - easy
+  timeout_seconds: 60
+- id: 77284cdc
+  name: capital_france
+  input: What is the capital of France?
+  expected_output: Paris
+  metadata: {}
+  tags:
+  - geography
+  timeout_seconds: 60
+- id: 8de5294b
+  name: python_fibonacci
+  input: Write a Python function to compute fibonacci(10)
+  expected_output: '55'
+  metadata: {}
+  tags:
+  - code
+  timeout_seconds: 60
