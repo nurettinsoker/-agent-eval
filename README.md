@@ -1,118 +1,119 @@
-# Agent Eval
+# agent-eval
 
-Open-source agent evaluation platform - CLI + Dashboard for testing AI agents.
+Open-source AI agent evaluation platform. Test your LLM agents across multiple test cases with pluggable graders and visualize results on a web dashboard.
 
-## Quickstart
+## Features
+
+- **CLI Engine**: Run evaluation suites from the command line
+- **5 Grader Types**: exact_match, semantic_similarity, llm_judge, regex, code_execution
+- **Agent Adapters**: OpenAI, Anthropic, custom HTTP endpoints, MockAgent for testing
+- **Web Dashboard**: Next.js dashboard with tRPC API, dark mode, trace viewer
+- **Push to Dashboard**: Send CLI results to dashboard with `--push` flag
+
+## Quick Start
+
+### Python CLI
 
 ```bash
-# Install
 pip install -e .
 
-# Set API key
-export OPENAI_API_KEY="sk-..."
+# Initialize example project
+agent-eval init my-project
 
-# Run evaluation
-agent-eval run examples/suite.yaml --agent examples/agent.yaml
+# Run evaluation with mock agent (no API key needed)
+agent-eval run my-project/suite.yaml --agent my-project/agent.yaml
+
+# Run and push results to dashboard
+agent-eval run my-project/suite.yaml --agent my-project/agent.yaml --push
 ```
 
-## Commands
+### Dashboard
 
 ```bash
-agent-eval init                    # Create example project structure
-agent-eval run suite.yaml          # Run evaluation suite
-agent-eval run suite.yaml --agent agent.yaml --push  # Push to dashboard
-agent-eval list                    # List recent runs
-agent-eval view <run_id>           # View run details
-agent-eval version                 # Show version
+cd dashboard
+pnpm install
+npx prisma db push
+npx prisma db seed
+pnpm dev
 ```
 
-## Configuration
+Open http://localhost:3000
 
-### Agent Config (`agent.yaml`)
+## Agent Config (agent.yaml)
+
 ```yaml
-name: "my-agent"
-provider: "openai"  # openai, anthropic, http
-model: "gpt-4o-mini"
+name: my-agent
+provider: openai          # openai | anthropic | http | mock
+model: gpt-4o-mini
 temperature: 0.0
 max_tokens: 2000
 system_prompt: "You are a helpful assistant."
-tools: []
-api_key_env: "OPENAI_API_KEY"
 ```
 
-### Test Suite (`suite.yaml`)
+## Test Cases (tests.yaml)
+
 ```yaml
 test_cases:
-  - id: "test-001"
-    name: "Test Name"
-    input: "Your prompt here"
-    expected_output: "Expected answer"
-    tags: ["category"]
-    metadata:
-      difficulty: "easy"
+  - name: basic_math
+    input: "What is 2 + 2?"
+    expected_output: "4"
+    tags: [math, easy]
+  - name: capital_france
+    input: "What is the capital of France?"
+    expected_output: "Paris"
+    tags: [geography]
+```
 
+## Graders (graders.yaml)
+
+```yaml
 graders:
-  - type: "exact_match"
-    name: "exact_match"
+  - type: exact_match
+    name: exact
     case_sensitive: false
-  - type: "llm_judge"
-    name: "llm_judge"
-    model: "gpt-4o-mini"
-  - type: "regex"
-    name: "contains_number"
-    pattern: "\\d+"
+  - type: semantic_similarity
+    name: semantic
+    threshold: 0.75
+  - type: llm_judge
+    name: judge
+    model: gpt-4o-mini
 ```
 
-### Grader Types
-| Type | Description |
+## Suite (suite.yaml)
+
+```yaml
+name: basic_suite
+agent: agent.yaml
+test_cases: tests.yaml
+graders: graders.yaml
+```
+
+## CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `agent-eval init [dir]` | Create example project |
+| `agent-eval run <suite> --agent <agent>` | Run evaluation |
+| `agent-eval version` | Show version |
+
+### Run Options
+
+| Flag | Description |
 |------|-------------|
-| `exact_match` | Exact string comparison |
-| `regex` | Regex pattern matching |
-| `llm_judge` | LLM evaluates correctness |
-| `code_execution` | Executes Python code, checks output |
-| `semantic_similarity` | Embedding-based similarity |
+| `--agent, -a` | Agent config file |
+| `--graders, -g` | Graders config file |
+| `--output, -o` | Save results to JSON |
+| `--concurrency, -c` | Max concurrent tests (default: 3) |
+| `--verbose, -v` | Detailed output |
+| `--push` | Push results to dashboard |
+| `--project-id` | Dashboard project ID |
+| `--api-url` | Dashboard API URL |
 
-## Architecture
+## Tech Stack
 
-```
-agent-eval/
-├── src/agent_eval/
-│   ├── __init__.py
-│   ├── schemas.py         # Pydantic models
-│   ├── agent.py           # Agent adapters (OpenAI, Anthropic, HTTP)
-│   ├── graders.py         # Grader implementations
-│   ├── graders_factory.py # Config-based grader loading
-│   ├── eval_runner.py     # Orchestration
-│   └── cli.py             # Typer CLI
-├── examples/
-│   ├── agent.yaml
-│   └── suite.yaml
-├── tests/
-├── pyproject.toml
-└── README.md
-```
-
-## Dashboard (Coming Soon)
-
-- Next.js + tRPC + Prisma
-- Visual trace viewer (React Flow)
-- Failure clustering
-- Regression detection
-- GitHub Action for CI/CD
-
-## Development
-
-```bash
-# Install dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Lint
-ruff check .
-mypy src/
-```
+- **CLI**: Python 3.12+, Typer, Rich, Pydantic, httpx, asyncio
+- **Dashboard**: Next.js 14, tRPC, Prisma, SQLite, Tailwind CSS v4
+- **Agents**: OpenAI API, Anthropic API, custom HTTP
 
 ## License
 
