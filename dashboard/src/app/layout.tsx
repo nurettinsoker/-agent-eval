@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { TRPCProvider } from "@/components/TRPCProvider";
-import { Navigation } from "@/components/Navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Agent Eval",
-  description: "Open-source agent evaluation platform",
+  title: "Agent Eval - Evaluate Your AI Agents",
+  description: "Open-source AI agent evaluation platform. Test LLM agents across multiple cases with pluggable graders.",
 };
 
 export default function RootLayout({
@@ -20,8 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <TRPCProvider>
-          <Navigation />
-          <main className="min-h-screen">{children}</main>
+          {children}
         </TRPCProvider>
       </body>
     </html>

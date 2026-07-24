@@ -53,6 +53,9 @@ importers:
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
+      stripe:
+        specifier: ^22.3.2
+        version: 22.3.2(@types/node@20.19.43)
       superjson:
         specifier: ^2.2.6
         version: 2.2.6
@@ -2140,6 +2143,15 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
+  stripe@22.3.2:
+    resolution: {integrity: sha512-O13QOvgEIQvDlTy6Ubb5kB980wpbhmoZNsgCXKILjCMZS67f+bW+6w99k3gnSi/N1lkryoj1WYdpGT5Wc5edjg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
@@ -4043,7 +4055,7 @@ snapshots:
       next: 16.2.11(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       oauth: 0.9.15
       openid-client: 5.7.1
-      preact: 10.29.7(preact-render-to-string@5.2.6(preact@10.24.3))
+      preact: 10.29.7(preact-render-to-string@5.2.6)
       preact-render-to-string: 5.2.6(preact@10.29.7)
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -4195,7 +4207,7 @@ snapshots:
 
   preact-render-to-string@5.2.6(preact@10.29.7):
     dependencies:
-      preact: 10.29.7(preact-render-to-string@5.2.6(preact@10.24.3))
+      preact: 10.29.7(preact-render-to-string@5.2.6)
       pretty-format: 3.8.0
 
   preact-render-to-string@6.5.11(preact@10.24.3):
@@ -4204,7 +4216,7 @@ snapshots:
 
   preact@10.24.3: {}
 
-  preact@10.29.7(preact-render-to-string@5.2.6(preact@10.24.3)):
+  preact@10.29.7(preact-render-to-string@5.2.6):
     optionalDependencies:
       preact-render-to-string: 5.2.6(preact@10.29.7)
 
@@ -4452,6 +4464,10 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-json-comments@3.1.1: {}
+
+  stripe@22.3.2(@types/node@20.19.43):
+    optionalDependencies:
+      '@types/node': 20.19.43
 
   styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.4):
     dependencies:

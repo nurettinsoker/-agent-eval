@@ -57,7 +57,7 @@ export default function RunsPage() {
                 {runs.map((run: any) => (
                   <tr key={run.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                     <td className="px-4 py-4">
-                      <Link href={`/runs/${run.id}`} className="font-mono text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href={`/dashboard/runs/${run.id}`} className="font-mono text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         {run.id.slice(0, 8)}
                       </Link>
                     </td>
