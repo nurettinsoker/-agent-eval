@@ -10,6 +10,11 @@ Open-source AI agent evaluation platform. Test your LLM agents across multiple t
 - **Web Dashboard**: Next.js dashboard with tRPC API, dark mode, trace viewer
 - **Push to Dashboard**: Send CLI results to dashboard with `--push` flag
 
+## Prerequisites
+
+- Python 3.12+
+- Node.js 18+ and pnpm (for dashboard)
+
 ## Quick Start
 
 ### Python CLI
@@ -32,14 +37,16 @@ agent-eval run my-project/suite.yaml --agent my-project/agent.yaml --push
 ```bash
 cd dashboard
 pnpm install
-npx prisma db push
+npx prisma migrate dev
 npx prisma db seed
 pnpm dev
 ```
 
 Open http://localhost:3000
 
-## Agent Config (agent.yaml)
+## Configuration
+
+### Agent Config (agent.yaml)
 
 ```yaml
 name: my-agent
@@ -50,7 +57,7 @@ max_tokens: 2000
 system_prompt: "You are a helpful assistant."
 ```
 
-## Test Cases (tests.yaml)
+### Test Cases (tests.yaml)
 
 ```yaml
 test_cases:
@@ -64,7 +71,7 @@ test_cases:
     tags: [geography]
 ```
 
-## Graders (graders.yaml)
+### Graders (graders.yaml)
 
 ```yaml
 graders:
@@ -79,7 +86,7 @@ graders:
     model: gpt-4o-mini
 ```
 
-## Suite (suite.yaml)
+### Suite (suite.yaml)
 
 ```yaml
 name: basic_suite
@@ -109,11 +116,34 @@ graders: graders.yaml
 | `--project-id` | Dashboard project ID |
 | `--api-url` | Dashboard API URL |
 
+## Installation & Development
+
+### Local Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/nurettinsoker/-agent-eval.git
+cd -agent-eval
+
+# Setup CLI
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -e .
+
+# Setup Dashboard
+cd dashboard
+pnpm install
+```
+
 ## Tech Stack
 
 - **CLI**: Python 3.12+, Typer, Rich, Pydantic, httpx, asyncio
 - **Dashboard**: Next.js 14, tRPC, Prisma, SQLite, Tailwind CSS v4
 - **Agents**: OpenAI API, Anthropic API, custom HTTP
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
